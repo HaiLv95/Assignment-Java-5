@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>Create Account</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-user}"></div>
+    <!--End Nav-->
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('shopping-cart') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart}">Shopping cart</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('check-out') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart/check-out}">Check-out</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('orders') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/orders}">Đơn hàng</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <form class="form-group" th:action="@{/shopping-cart/check-out}" method="post"
+                      th:object="${order}">
+                    <div class="row justify-content-center m-2">
+                        <h1 class="fw-bold link-success mt-2 mb-3"
+                            th:text="INFOMATION"></h1>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="id"
+                                       placeholder="Product Name"
+                                       th:field="*{id}"
+                                       readonly>
+                                <label for="id">Order ID</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="Product Name"
+                                       th:field="*{nameReceived}"
+                                       maxlength="45"
+                                       oninvalid="this.setCustomValidity('Name received can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="floatingInput">Name Receive</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="Product Name"
+                                       pattern="[0-9]{10}"
+                                       th:field="*{phoneNumber}"
+                                       oninvalid="this.setCustomValidity('Address can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="floatingInput">Phone Number</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="Product Name"
+                                       th:field="*{address}"
+                                       maxlength="100"
+                                       oninvalid="this.setCustomValidity('Address can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="floatingInput">Address</label>
+                            </div>
+
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <button class="btn btn-success col-3 me-3"
+                                    type="submit" th:text="Confirm">
+                            </button>
+                            <button class="btn btn-secondary col-2" type="reset">Reset</button>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+        <!--    end article    -->
+    </div>
+</div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <title>Home</title>
+</head>
+<body onload="ShowToast()">
+<!--Nav-->
+<div th:insert="~{/layout/navbar-user :: nav-bar}"></div>
+<!--End Nav-->
+
+
+<!--Content-->
+
+
+<!-- Start Content -->
+<div class="container py-5">
+    <div class="row">
+
+        <!-- Open Content -->
+        <section class="bg-light">
+            <div class="container pb-5">
+                <div class="row">
+                    <div class="col-lg-5 mt-5">
+                        <img class="img-fluid" th:src="@{'/shop/images/' + ${product.image}}">
+                    </div>
+                    <!-- col end -->
+                    <div class="col-lg-7 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 class="h2" th:text="${product.name}"></h1>
+                                <p class="h3 py-2" th:text="${product.price + ' VNĐ'}"></p>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <h6>Category:</h6>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="h4 text-decoration-underline text-primary" href="#"
+                                           th:text="${product.categoryID.name}"></a>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <h6>Sell:</h6>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <p class="h4 text-danger"
+                                           th:text="${product.sell}"></p>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <h6>Color:</h6>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <input  type="color" th:value="${product.color}" style="width: 30px; height: 30px" disabled>
+                                    </li>
+                                </ul>
+
+                                <h6>Description:</h6>
+                                <p th:text="${product.desc}"></p>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <a th:href="@{'/shopping-cart/add/' + ${product.id}}"
+                                       class="btn btn-success btn-lg me-1"
+                                    >Add To Cart
+                                    </a>
+                                </div>
+                            </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+    <!-- Close Content -->
+
+    <!-- Start Article -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-left p-2 pb-3">
+                <h4>Best Sell-Products</h4>
+            </div>
+            <!--Start Carousel Wrapper-->
+            <div class="row">
+                <div class="col-md-4" th:each="product : ${top3Product}">
+                    <div class="card mb-4 product-wap rounded-0" style="height: 530px">
+                        <div class="card rounded-0">
+                            <img class="card-img rounded-0 img-fluid" th:src="@{'/shop/images/' + ${product.image}}"
+                                 style="height: 370px">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li><a class="btn btn-success text-white mt-2" th:href="@{'/shop/'+ ${product.id}}"><i
+                                            class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2"
+                                           th:href="@{'/shoppingcart/add/' + ${product.id}}"><i
+                                            class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="shop-single.html" class="h3 text-decoration-none"
+                               th:text="${#strings.toUpperCase(product.name)}"></a>
+                            <p class="text-sm-start mt-1 mb-1"
+                               th:classappend="${product.sell} >= 10 ? 'text-danger': 'text-primary'"
+                               th:text="${'Đã bán (' + product.sell + ')'}"></p>
+                            <p class="text-center mb-0" th:text="${'$ ' + product.price}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- End Article -->
+
+</div>
+
+<!-- End Content -->
+
+</div>
+<!--End Content-->
+
+<!--Footer-->
+<div th:insert="~{/layout/footer-user}"></div>
+<!--End Footer-->
+<th:block th:insert="~{/layout/fragment-css-js :: script}"></th:block>
+</body>
+</html>
+
+
+</html>

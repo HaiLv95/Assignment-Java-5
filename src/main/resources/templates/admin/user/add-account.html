@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>Create Account</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('user-manager') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/user-manager}">All
+                            Account</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('user-manager/add') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/user-manager/add}">Create
+                            Account</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <form class="form-group" th:action="@{/admin/user-manager/addOrEdit}" method="post"
+                      th:object="${account}" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{edit}">
+                    <div class="row justify-content-center m-2">
+                        <h1 class="fw-bold link-success mt-2 mb-3"
+                            th:text="${account.isEdit ? 'UPDATE ACCOUNT' : 'ADD ACCOUNT'}"></h1>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="username"
+                                       th:field="*{username}"
+                                       maxlength="50"
+                                       oninvalid="this.setCustomValidity('Username can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       th:readonly="${account.isEdit} ? true:false"
+                                       required>
+                                <label for="floatingInput">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="fullname"
+                                       maxlength="50"
+                                       placeholder="fullname"
+                                       th:field="*{fullname}"
+                                       oninvalid="this.setCustomValidity('Fullname can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="fullname">FullName</label>
+                            </div>
+                            <th:block th:if="${!account.isEdit}">
+                                <div class="form-floating mb-3">
+                                    <input type="text"
+                                           class="form-control"
+                                           id="password"
+                                           placeholder="username"
+                                           th:field="*{password}"
+                                           maxlength="255"
+                                           minlength="1"
+                                           oninvalid="this.setCustomValidity('Password invalid')"
+                                           oninput="this.setCustomValidity('')"
+                                           required>
+                                    <label for="password">Password</label>
+                                </div>
+                            </th:block>
+                            <div class="form-floating mb-3">
+                                <input type="email"
+                                       class="form-control"
+                                       id="email"
+                                       placeholder="username"
+                                       th:field="*{email}"
+                                       maxlength="100"
+                                       oninvalid="this.setCustomValidity('Email can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="email">Email</label>
+                            </div>
+                            <label>Role:</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{role}"
+                                       id="inlineRadio1" value="role_admin">
+                                <label class="form-check-label" for="inlineRadio1">Admin</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{role}"
+                                       id="inlineRadio2" value="role_user">
+                                <label class="form-check-label" for="inlineRadio2">User</label>
+                            </div>
+                            <br>
+                            <br>
+                            <label>Activated:</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{activated}"
+                                       id="activated1" value="true">
+                                <label class="form-check-label" for="activated1">Activated</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{activated}"
+                                       id="activated2" value="false">
+                                <label class="form-check-label" for="activated2">In Activated</label>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <input type="hidden" th:field="*{photo}">
+                            <img id="img"
+                                 th:src="@{ ${account.isEdit} ? ${'/admin/user-manager/images/' + account.photo} : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLEeuHsdPESErnTn4D6YwujuzciewAHf3y2PB33sZrJXFHdELOP5VQCMjNoXCTi6e9EQ&usqp=CAU'}"
+                                 class="img-thumbnail" alt="..."
+                                 style="height: 350px; width: 300px">
+                            <div class="input-group mb-3" style="width: 300px">
+                                <input type="file"
+                                       th:field="*{imageFile}"
+                                       class="form-control"
+                                       onchange="showImage(this)">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <button class="btn btn-success col-3 me-3"
+                                    type="submit" th:text="${account.isEdit ? 'Update': 'Create'}">
+                            </button>
+                            <button class="btn btn-secondary col-2" type="reset">Reset</button>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+        <!--    end article    -->
+    </div>
+</div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>

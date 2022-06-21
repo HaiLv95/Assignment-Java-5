@@ -1,0 +1,44 @@
+body {
+    min-height: 800px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.form-layout {
+    margin-top: 8rem;
+    padding-bottom: 3rem;
+    background-color: white;
+}
+
+.title-form {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    color: darkblue;
+}
+
+.form-button {
+    margin-top: 2rem;
+    text-align: center;
+}
+.btn-custom{
+    width: 12rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 26px;
+    padding: 2px;
+}
+.login-header{
+    text-align: right;
+}
+.material-icons-outlined{
+    font-size: 48px;
+}
+.form-footer{
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+.form-footer a{
+    text-decoration: none;
+}

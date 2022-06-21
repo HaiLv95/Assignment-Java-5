@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <title>Home</title>
+</head>
+<body onload="ShowToast()">
+<!--Nav-->
+<div th:insert="~{/layout/navbar-user :: nav-bar}"></div>
+<!--End Nav-->
+<!--  Toast  -->
+<div th:if="${message.length()} > 0">
+    <div th:replace="~{toast/toast-success}"></div>
+</div>
+
+<!--  End Toast  -->
+
+<!--Content-->
+<div class="container-fluid">
+    <!-- Banner Hero -->
+    <div class="row p-5">
+        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+            <img class="img-fluid" th:src="@{'/images/' + ${top1Product.image}}" style="height: 600px; ; width: 600px" alt="">
+        </div>
+        <div class="col-lg-6 mb-0 d-flex align-items-center">
+            <div class="text-align-left align-self-center">
+                <h1 class="h1 text-success"><b>Best</b> - Selling Product</h1>
+                <h3 class="h2" th:text="${top1Product.name}"></h3>
+                <p th:text="${top1Product.desc}"></p>
+                <a rel="sponsored" class="text-success" th:href="@{'/shop/' + ${top1Product.id}}">More
+                infomation...</a>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Banner Hero -->
+
+
+
+    <!-- Start Featured Product -->
+    <section class="bg-light">
+        <div class="container py-5">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+                    <h1 class="h1">Featured Product</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4 mb-4" th:each="item : ${top3products}">
+                    <div class="card h-100">
+                        <a th:href="@{'/shop/' + ${item.id}}">
+                            <img th:src="@{'/images/' + ${item.image}}" class="card-img-top" style="height: 450px"
+                                 alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li class="text-muted text-right"><p th:text="${item.price} + ' VNĐ'"></p></li>
+                            </ul>
+                            <a th:href="@{'/shop/' + ${item.id}}" class="h2 text-decoration-none text-dark"
+                               th:text="${item.name}"></a>
+                            <p class="card-text" th:text="${item.desc}">
+                            </p>
+                            <p class="text-muted" style="text-align: right"
+                               th:text="'Đã bán (' + ${item.sell} + ')'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Featured Product -->
+</div>
+<!--End Content-->
+
+<!--Footer-->
+<div th:insert="~{/layout/footer-user}"></div>
+<!--End Footer-->
+<th:block th:insert="~{/layout/fragment-css-js :: script}"></th:block>
+</body>
+</html>

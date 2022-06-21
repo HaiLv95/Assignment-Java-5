@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="home-content">
+    <!-- Start Banner Hero -->
+    <div class="container">
+        <div class="row p-5">
+            <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                <img class="img-fluid" th:src="@{'/img/' + ${product.image}}" style="height: 600px" alt="">
+            </div>
+            <div class="col-lg-6 mb-0 d-flex align-items-center">
+                <div class="text-align-left align-self-center">
+                    <h1 class="h1 text-success"><b>Best</b> - selling Product</h1>
+                    <h3 class="h2" th:text="${product.name}"></h3>
+                    <p th:text="${product.desc}"></p>
+                    <a rel="sponsored" class="text-success" th:href="@{'/shop/' + ${product.id}}">More
+                        infomation...</a>
+                </div>
+            </div>
+        </div>
+        <!-- End Banner Hero -->
+
+
+        <!-- Start Categories of The Month -->
+        <section class="container py-5">
+            <div class="row text-center pt-3">
+                <div class="col-lg-6 m-auto">
+                    <h1 class="h1">Categories of The Month</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4 p-5 mt-3" th:each="category : ${top3categories}">
+                    <a href="#"><img th:src="@{'/img/' + ${category.image}}"
+                                     class="rounded-circle img-fluid border"></a>
+                    <h5 class="text-center mt-3 mb-3">Watches</h5>
+                    <p class="text-center"><a class="btn btn-success" th:href="@{/}">Go Shop</a></p>
+                </div>
+
+            </div>
+        </section>
+        <!-- End Categories of The Month -->
+
+
+        <!-- Start Featured Product -->
+        <section class="bg-light">
+            <div class="container py-5">
+                <div class="row text-center py-3">
+                    <div class="col-lg-6 m-auto">
+                        <h1 class="h1">Featured Product</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4 mb-4" th:each="item : ${top3products}">
+                        <div class="card h-100">
+                            <a th:href="@{'/shop/' + ${product.id}}">
+                                <img th:src="@{'/img/' + ${item.image}}" class="card-img-top" style="height: 450px"
+                                     alt="...">
+                            </a>
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between">
+                                    <li class="text-muted text-right"><p th:text="${item.price} + ' VNĐ'"></p></li>
+                                </ul>
+                                <a th:href="@{'/shop/' + ${product.id}}" class="h2 text-decoration-none text-dark"
+                                   th:text="${item.name}"></a>
+                                <p class="card-text" th:text="${item.desc}">
+                                </p>
+                                <p class="text-muted" style="text-align: right"
+                                   th:text="'Đã bán (' + ${item.sell} + ')'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Featured Product -->
+    </div>
+</div>
+</html>

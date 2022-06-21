@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <title>Home</title>
+    <style th:inline="text">
+        body{
+            background-image: url('[[@{/}]]img/background-admin.jpeg');
+            min-height: 800px;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+<body onload="ShowToast()">
+<!--Nav-->
+<div th:insert="~{/layout/navbar-admin}"></div>
+<!--End Nav-->
+
+
+<!--Content-->
+<div class="container-fluid" style="min-height: 500px">
+
+</div>
+<!--End Content-->
+
+<!--Footer-->
+<div th:insert="~{/layout/footer-user}"></div>
+<!--End Footer-->
+<th:block th:insert="~{/layout/fragment-css-js :: script}"></th:block>
+<script th:src="@{/css/admin}"></script>
+</body>
+</html>

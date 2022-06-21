@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>Create Account</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('products-manager') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/products-manager}">All Product</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('products-manager/add') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/products-manager/add}">Add Product</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <form class="form-group" th:action="@{/admin/products-manager/addOrEdit}" method="post"
+                      th:object="${product}" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{edit}">
+                    <div class="row justify-content-center m-2">
+                        <h1 class="fw-bold link-success mt-2 mb-3"
+                            th:text="${product.isEdit ? 'UPDATE PRODUCT' : 'ADD PRODUCT'}"></h1>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="id"
+                                       placeholder="Product Name"
+                                       th:field="*{id}"
+                                       readonly>
+                                <label for="id">Product ID</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="Product Name"
+                                       th:field="*{name}"
+                                       maxlength="100"
+                                       oninvalid="this.setCustomValidity('Product name can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="floatingInput">Product Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="color"
+                                       class="form-control"
+                                       id="fullname"
+                                       maxlength="50"
+                                       th:field="*{color}"
+                                       oninvalid="this.setCustomValidity('Color can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="fullname">Color</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number"
+                                       class="form-control"
+                                       id="size"
+                                       placeholder="username"
+                                       th:field="*{size}"
+                                       min="1"
+                                       oninvalid="this.setCustomValidity('Size is not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="size">Size</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="number"
+                                       class="form-control"
+                                       id="price"
+                                       placeholder="Price"
+                                       th:field="*{price}"
+                                       min="0"
+                                       oninvalid="this.setCustomValidity('Price can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="price">Price</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number"
+                                       class="form-control"
+                                       id="quantity"
+                                       placeholder="Quantity"
+                                       th:field="*{quantity}"
+                                       min="0"
+                                       oninvalid="this.setCustomValidity('Quantity can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="quantity">Quantity</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number"
+                                       class="form-control"
+                                       id="sell"
+                                       placeholder="Sell"
+                                       th:field="*{sell}"
+                                       min="0"
+                                       oninvalid="this.setCustomValidity('Sell can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="sell">Sell</label>
+                            </div>
+                            <div class="mb-3">
+                                <label>Category</label>
+                                <select class="form-select" aria-label="Default select example"
+                                        th:field="*{categoryID}">
+                                    <th:block th:each="category : ${categories}">
+                                        <option th:value="${category.id}" th:text="${category.name}"></option>
+                                    </th:block>
+
+                                </select>
+                            </div>
+                            <label>Available:</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{available}"
+                                       id="activated1" value="true">
+                                <label class="form-check-label" for="activated1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{available}"
+                                       id="activated2" value="false">
+                                <label class="form-check-label" for="activated2">No</label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-3">
+                            <input type="hidden" th:field="*{image}">
+                            <img id="img"
+                                 th:src="@{ ${product.isEdit} ? ${'/admin/products-manager/images/' + product.image} : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLEeuHsdPESErnTn4D6YwujuzciewAHf3y2PB33sZrJXFHdELOP5VQCMjNoXCTi6e9EQ&usqp=CAU'}"
+                                 class="img-thumbnail" alt="..."
+                                 style="height: 350px; width: 300px">
+                            <div class="input-group mb-3" style="width: 300px">
+                                <input type="file"
+                                       th:field="*{imageFile}"
+                                       class="form-control"
+                                       onchange="showImage(this)">
+                            </div>
+                            <div class="form-floating mt-3">
+                                <textarea type="text"
+                                          class="form-control"
+                                          id="desc"
+                                          placeholder="Desciption"
+                                          th:field="*{desc}"
+                                          oninvalid="this.setCustomValidity('Description can not empty')"
+                                          oninput="this.setCustomValidity('')"
+                                          style="height: 200px"
+                                          required></textarea>
+                                <label for="desc">Description</label>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <button class="btn btn-success col-3 me-3"
+                                    type="submit" th:text="${product.isEdit ? 'Update': 'Create'}">
+                            </button>
+                            <button class="btn btn-secondary col-2" type="reset">Reset</button>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+        <!--    end article    -->
+    </div>
+</div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="nav-bar">
+    <!-- Start Top Nav -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+        <div class="container text-light">
+            <div class="w-100 d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-envelope mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="mailto:hailvph13040@fpt.edu.vn">hailvph13040@fpt.edu.vn</a>
+                    <i class="fa fa-phone mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="tel:0333103855">033-310-3855</a>
+                </div>
+                <div>
+                    <a class="text-light" href="https://fb.com/templatemo" target="_blank" rel="sponsored"><i
+                            class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.instagram.com/" target="_blank"><i
+                            class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://twitter.com/" target="_blank"><i
+                            class="fab fa-twitter fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.linkedin.com/" target="_blank"><i
+                            class="fab fa-linkedin fa-sm fa-fw"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Top Nav -->
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="/home">
+                Hai Lúa
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                 id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-start mx-lg-auto">
+                        <li class="nav-item col-3">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        <li class="nav-item col-3">
+                            <a class="nav-link" href="/shop">Shop</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal"
+                       data-bs-target="#templatemo_search">
+                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" th:href="@{/shopping-cart}">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="#">
+
+                        <div class="dropdown">
+                            <a class="dropdown-toggle text-decoration-none" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <th:block th:if="${#request.remoteUser}">
+                                    [[${#strings.toUpperCase(#request.remoteUser)}]]
+                                </th:block>
+                                <th:block th:unless="${#request.remoteUser}">
+                                    <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                                </th:block>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <th:block th:if="${#request.remoteUser}">
+                                    <li><a class="dropdown-item" th:href="@{/user/profile}">Profile</a></li>
+                                    <li><a class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#staticBackdrop">Change Password</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/logout}">Sign Out</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/home}">Admin Manager</a></li>
+                                </th:block>
+                                <th:block th:unless="${#request.remoteUser}">
+                                    <li><a class="dropdown-item" th:href="@{/login}">Sign In</a></li>
+                                    <li><a class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#forgotPassword">Forgot Password</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/signup}">Sign Up</a></li>
+                                </th:block>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <!-- Close Header -->
+
+    <!-- Modal  Search-->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/shop/search" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="name" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Modal -->
+
+    <!--    Modal ChangePassword    -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel">Change Password</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/user/change-password}" method="post">
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text"
+                                   class="form-control"
+                                   id="floatingInput"
+                                   th:value="${#request.remoteUser}"
+                                   placeholder="Username">
+                            <label for="floatingInput">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password"
+                                   class="form-control"
+                                   id="oldPass"
+                                   placeholder="Password"
+                                   name="oldPass"
+                                   oninvalid="this.setCustomValidity('Password can not empty')"
+                                   oninput="this.setCustomValidity('')"
+                                   required>
+                            <label for="oldPass">Password</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password"
+                                   class="form-control"
+                                   id="newPass"
+                                   name="newPass"
+                                   placeholder="Password"
+                                   onchange="checkPasswordChange()"
+                                   oninvalid="this.setCustomValidity('New Password can not empty')"
+                                   oninput="this.setCustomValidity('')"
+                                   required>
+                            <label for="newPass">New Password</label>
+                            <span id="warning" style="color: red"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password"
+                                   class="form-control"
+                                   id="cfNewPass"
+                                   placeholder="Password"
+                                   oninvalid="this.setCustomValidity('Confirm Password can not empty')"
+                                   oninput="this.setCustomValidity('')"
+                                   onchange="checkPasswordChange()"
+                                   required>
+                            <label for="cfNewPass">Confirm New Password</label>
+                            <span id="warning1" style="color: red"></span>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" id="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+                <script type="text/javascript">
+                    function checkPasswordChange() {
+                        var oldPass = document.getElementById('oldPass');
+                        var newPass = document.getElementById('newPass');
+                        var cfNewPass = document.getElementById('cfNewPass');
+                        if (newPass.value === oldPass.value) {
+                            document.getElementById('warning').innerHTML = 'Mật khẩu mới không được trùng với mật khẩu cũ';
+                            document.getElementById('submit').disabled = true
+
+                        } else {
+
+                            if (cfNewPass.value === newPass.value) {
+                                document.getElementById('warning').innerHTML = '';
+                                document.getElementById('submit').disabled = false
+                            } else {
+                                document.getElementById('warning').innerHTML = 'Xác nhận mật khẩu không khớp';
+                                document.getElementById('submit').disabled = true
+                            }
+
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    <!--    End Modal ChangePassword    -->
+
+    <!--    Modal ForgotPassword    -->
+    <div class="modal fade" id="forgotPassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel1">Change Password</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/forgot-password}" method="post">
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text"
+                                   class="form-control"
+                                   id="username"
+                                   name="username"
+                                   oninvalid="this.setCustomValidity('Username can not empty')"
+                                   oninput="this.setCustomValidity('')"
+                                   placeholder="Username"
+                                   required>
+                            <label for="floatingInput">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   name="email"
+                                   oninvalid="this.setCustomValidity('Email can not empty')"
+                                   oninput="this.setCustomValidity('')"
+                                   placeholder="Enail"
+                                   required>
+                            <label for="floatingInput">Email</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!--    End Modal ForgotPassword    -->
+</div>
+
+</html>

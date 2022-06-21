@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>User Manager</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8 pb-4">
+                <h1>Order List</h1>
+            </div>
+            <div class="col-md-3 me-4">
+                <form class="d-flex" th:action="@{/admin/orderlist}" method="get">
+                    <input type="hidden" name="sort" value="true">
+                    <select class="form-control" onchange="this.form.submit()" name="filter">
+                        <option value="all" th:selected="${sortName.equalsIgnoreCase('all')}">All</option>
+                        <option value="pending" th:selected="${sortName.equalsIgnoreCase('pending')}">Pending</option>
+                        <option value="success"th:selected="${sortName.equalsIgnoreCase('success')}">Success</option>
+                        <option value="delivering" th:selected="${sortName.equalsIgnoreCase('delivering')}">Delivering</option>
+                        <option  value="cancel" th:selected="${sortName.equalsIgnoreCase('cancel')}">Cancled</option>
+                    </select>
+                </form>
+            </div>
+                        <table class="table-bordered border-primary">
+                            <thead>
+                            <tr>
+                                <th class="col-1">Order ID</th>
+                                <th class="col-2">Received Name</th>
+                                <th class="col-1">Phone Number</th>
+                                <th class="col-1">OrderDate</th>
+                                <th class="col-3">Address Received</th>
+                                <th class="col-1">Status</th>
+                                <th class="col-2"></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="order : ${orderPage}">
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.nameReceived}"></td>
+                                <td th:text="${order.phoneNumber}"></td>
+                                <td th:text="${order.orderDate}"></td>
+                                <td th:text="${order.address}"></td>
+                                <td>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('pending')}">
+                                        <span class="text-decoration-underline link-primary">Chờ xác nhận</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('delivering')}">
+                                        <span class="text-decoration-underline link-warning">Đang giao hàng</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('success')}">
+                                        <span class="text-decoration-underline link-success">Đã giao</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('cancel')}">
+                                        <span class="text-decoration-underline link-secondary">Đã hủy</span>
+                                    </th:block>
+                                </td>
+                                <td>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('pending')}">
+                                        <a class="btn btn-primary" th:href="@{'/admin/orderlist/confirm/' + ${order.id}}">Xác nhận</a>
+                                        <a class="btn btn-danger" th:href="@{'/admin/orderlist/cancel/' + ${order.id}}">Hủy đơn</a>
+                                    </th:block>
+                                    <a th:href="@{'/admin/orderlist/detail/' + ${order.id}}" class="link-primary text-decoration-underline">Chi tiết</a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+            <nav class="mt-2" aria-label="Page navigation example" th:if="${orderPage.totalPages > 0}">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li th:class="${orderPage.number + 1 == 1} ? 'page-item active' : 'page-item'"
+                        style="margin-right: 5px">
+                        <a th:href="@{/admin/orderlist(size=${orderPage.size}, page=${1}, sort='false')}"
+                           class="page-link">First</a>
+                    </li>
+
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:if="${orderPage.totalPages > 0}"
+                        th:class="${pageNumber == orderPage.number + 1} ? 'page-item active' : 'page-item'">
+                        <a th:href="@{/admin/orderlist(page=${pageNumber}, sort='false')}"
+                           class="page-link" th:text="${pageNumber}"></a>
+                    </li>
+
+                    <li
+                            th:class="${orderPage.number + 1 == orderPage.totalPages} ? 'page-item active' : 'page-item'"
+                            style="margin-left: 5px">
+                        <a th:href="@{/admin/orderlist(size=${orderPage.size}, page=${orderPage.totalPages}, sort='false')}"
+                           class="page-link">Last</a>
+                    </li>
+                </ul>
+            </nav>
+                        <!--    end article    -->
+                    </div>
+                </div>
+            </div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function showData(id, name) {
+        $('#textName').text(name)
+        $('#button-delete').attr('href', '/shopping-cart/delete/' + id)
+    }
+</script>
+</body>
+</html>

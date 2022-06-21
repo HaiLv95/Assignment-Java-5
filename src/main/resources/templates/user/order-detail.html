@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>Order Detail</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-user}"></div>
+    <!--End Nav-->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('shopping-cart') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart}">Shopping cart</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('check-out') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart/check-out}">Check-out</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('orders') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/orders}">Đơn hàng</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+            <div class="col-10">
+                <div class="row justify-content-center mt-4">
+                    <div class="row justify-content-center">
+                        <h1>Order Detail</h1>
+                        <div class="row justify-content-center m-2">
+                            <table class="table-bordered border-primary">
+                                <thead>
+                                <tr>
+                                    <th class="col-3">Product Name</th>
+                                    <th class="col-3">Price</th>
+                                    <th class="col-2">Quantity</th>
+                                    <th class="col-2">Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${orderList}">
+                                    <td th:text="${item.productID.name}"></td>
+                                    <td th:text="${item.price}"></td>
+                                    <td th:text="${item.quantity}"></td>
+                                    <td th:text="${item.quantity * item.price}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--    end article    -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function showData(id, name) {
+            $('#textName').text(name)
+            $('#button-delete').attr('href', '/shopping-cart/delete/' + id)
+        }
+    </script>
+</body>
+</html>

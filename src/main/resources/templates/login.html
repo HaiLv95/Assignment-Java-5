@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <!--    CSS     -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"
+          th:href="@{https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}">
+    <!--  End CSS  -->
+    <link rel="stylesheet" th:href="@{/css/login-form.css}">
+    <title>Sign in</title>
+    <style th:inline="text">
+        body{
+            background-image: url('[[@{/}]]img/background-user.jpeg');
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="form-layout col-md-4">
+                <div class="row">
+                    <div class="col-6">
+
+                    </div>
+                    <div class="login-header col-6">
+                        <a class="link-dark" href="/">
+                        <span class="material-icons-outlined">
+                        home
+                    </span></a>
+                    </div>
+                </div>
+                <form class="form-group" th:action="@{/login}" method="post">
+                    <p class="title-form">Login</p>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username">
+                        <label for="floatingInput">Username</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" name="remember-me" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Remember me?
+                        </label>
+                    </div>
+                    <div class="form-button">
+                        <button type="submit" class="btn btn-primary btn-custom">Login</button>
+                    </div>
+                </form>
+                <hr>
+                <div class="form-footer">
+                    <a href="#">Forgot password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:insert="~{/layout/fragment-css-js :: script}"></th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>User Manager</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-user}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('shopping-cart') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart}">Shopping cart</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('check-out') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart/check-out}">Check-out</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('orders') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/orders}">Đơn hàng</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+            <div class="col-10">
+                <div class="row justify-content-center mt-4">
+                    <div class="row justify-content-center">
+                        <h1>Order List</h1>
+                    </div>
+                    <div class="row justify-content-center m-2">
+                        <table class="table-bordered border-primary">
+                            <thead>
+                            <tr>
+                                <th class="col-1">Order ID</th>
+                                <th class="col-2">Received Name</th>
+                                <th class="col-1">Phone Number</th>
+                                <th class="col-1">OrderDate</th>
+                                <th class="col-3">Address Received</th>
+                                <th class="col-1">Status</th>
+                                <th class="col-2"></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="order : ${orderList}">
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.nameReceived}"></td>
+                                <td th:text="${order.phoneNumber}"></td>
+                                <td th:text="${order.orderDate}"></td>
+                                <td th:text="${order.address}"></td>
+                                <td>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('pending')}">
+                                        <span class="text-decoration-underline link-primary">Chờ xác nhận</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('delivering')}">
+                                        <span class="text-decoration-underline link-warning">Đang giao hàng</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('success')}">
+                                        <span class="text-decoration-underline link-success">Đã giao</span>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('cancel')}">
+                                        <span class="text-decoration-underline link-secondary">Đã hủy</span>
+                                    </th:block>
+                                </td>
+                                <td>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('pending')}">
+                                        <a class="btn btn-danger" th:href="@{'/orders/cancel/' + ${order.id}}">Hủy
+                                            đơn</a>
+                                    </th:block>
+                                    <th:block th:if="${order.status.equalsIgnoreCase('delivering')}">
+                                        <a th:href="@{'/orders/success/' + ${order.id}}" class="btn btn-success">Đã nhận
+                                            hàng</a>
+                                    </th:block>
+                                    <a th:href="@{'/orders/orderdetail/' + ${order.id}}" class="link-primary text-decoration-underline">Chi tiết</a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--    end article    -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function showData(id, name) {
+        $('#textName').text(name)
+        $('#button-delete').attr('href', '/shopping-cart/delete/' + id)
+    }
+</script>
+</body>
+</html>

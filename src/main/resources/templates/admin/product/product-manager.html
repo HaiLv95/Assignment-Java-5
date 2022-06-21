@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>User Manager</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('products-manager') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/products-manager}">All
+                            Account</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('products-manager/add') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/products-manager/add}">Add Product</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <div class="row justify-content-center m-2">
+                    <table class="table-bordered border-primary">
+                        <thead>
+                        <tr>
+                            <th><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'id'}, sort='true')}">ID</a>
+                            </th>
+                            <th class="col-2"><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'name'}, sort='true')}">Name</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'createDate'}, sort='true')}">Create Date</a></th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'available'}, sort='true')}">Available</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'price'}, sort='true')}">Price</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'size'}, sort='true')}">Size</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'color'}, sort='true')}">Color</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'sell'}, sort='true')}">Sell</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'quantity'}, sort='true')}">Quantity</a>
+                            </th>
+                            <th class=""><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/products-manager/sort(sortby=${'categoryID'}, sort='true')}">Category</a>
+                            </th>
+                            <th class="col-1">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${productPage}">
+                            <td>[[${product.id}]]</td>
+                            <td>[[${product.name}]]</td>
+                            <td>[[${product.createDate}]]</td>
+                            <td>[[${product.available ? 'Yes' : 'No'}]]</td>
+                            <td>[[${product.price}]]</td>
+                            <td>[[${product.size}]]</td>
+                            <td>[[${product.color}]]</td>
+                            <td>[[${product.sell}]]</td>
+                            <td>[[${product.quantity}]]</td>
+                            <td>[[${product.categoryID.name}]]</td>
+                            <td>
+                                <a th:href="@{'/admin/products-manager/edit/' + ${product.id}}"
+                                   class="link-primary"><span
+                                        class="material-icons-outlined">edit</span></a>
+                                <a class="btn ms-1 p-0" data-bs-toggle="modal"
+                                   style="background: none; border: none"
+                                   th:href="@{'/admin/products-manager/lock/' + ${product.id}}">
+                                    <th:block th:if="${product.available}">
+                                        <span class="material-icons-outlined" style="color: blue">
+                                        lock_open
+                                    </span>
+                                    </th:block>
+                                    <th:block th:unless="${product.available}">
+                                        <span class="material-icons-outlined" style="color: red">
+                                    lock
+                                    </span>
+                                    </th:block>
+                                </a>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--                    &lt;!&ndash;Modal&ndash;&gt;-->
+                    <!--                    &lt;!&ndash; Ngăn đóng modal bằng nút esc : data-bs-keyboard="false"&ndash;&gt;-->
+                    <!--                    &lt;!&ndash; Ngăn đóng modal khi click ngoài modal : data-bs-backdrop="static"&ndash;&gt;-->
+                    <!--                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"-->
+                    <!--                         data-bs-keyboard="false"-->
+                    <!--                         tabindex="-1" >-->
+                    <!--                        <div class="modal-dialog">-->
+                    <!--                            <div class="modal-content">-->
+                    <!--                                <div class="modal-header">-->
+                    <!--                                    <h5 class="modal-title" id="staticBackdropLabel">Delete Account</h5>-->
+                    <!--                                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+                    <!--                                            aria-label="Close"></button>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="modal-body">-->
+                    <!--                                    <label class="form-label">Bạn có chắc chắn muốn xóa người dùng <span-->
+                    <!--                                            class="fw-bold" id="accountId"></span>-->
+                    <!--                                        không?</label>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="modal-footer">-->
+                    <!--                                    <a id="confirm"-->
+                    <!--                                       class="btn btn-primary">Delete</a>-->
+                    <!--                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">-->
+                    <!--                                        Cancel-->
+                    <!--                                    </button>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    &lt;!&ndash;End Modal&ndash;&gt;-->
+                    <nav class="mt-2" aria-label="Page navigation example" th:if="${productPage.totalPages > 0}">
+                        <ul class="pagination pagination-sm justify-content-center">
+                            <li th:class="${productPage.number + 1 == 1} ? 'page-item active' : 'page-item'"
+                                style="margin-right: 5px">
+                                <a th:href="@{/admin/products-manager(size=${productPage.size}, page=${1}, sort='false')}"
+                                   class="page-link">First</a>
+                            </li>
+
+                            <li th:each="pageNumber : ${pageNumbers}"
+                                th:if="${productPage.totalPages > 0}"
+                                th:class="${pageNumber == productPage.number + 1} ? 'page-item active' : 'page-item'">
+                                <a th:href="@{/admin/products-manager(page=${pageNumber}, sort='false')}"
+                                   class="page-link" th:text="${pageNumber}"></a>
+                            </li>
+
+                            <li
+                                    th:class="${productPage.number + 1 == productPage.totalPages} ? 'page-item active' : 'page-item'"
+                                    style="margin-left: 5px">
+                                <a th:href="@{/admin/products-manager(size=${productPage.size}, page=${productPage.totalPages}, sort='false')}"
+                                   class="page-link">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--    end article    -->
+        </div>
+    </div>
+    <!--End Content-->
+
+    <!--    &lt;!&ndash;Footer&ndash;&gt;-->
+    <!--    <div th:insert="~{/layout/footer-user}"></div>-->
+    <!--    &lt;!&ndash;End Footer&ndash;&gt;-->
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+</body>
+</html>

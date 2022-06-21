@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>User Manager</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-user}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('shopping-cart') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart}">Shopping cart</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('check-out') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/shopping-cart/check-out}">Check-out</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('orders') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/orders}">Đơn hàng</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+            <div class="col-10">
+                <div class="row justify-content-center mt-4">
+                    <div class="col-3">
+                    </div>
+                    <div class="col-9">
+                        <div class="row justify-content-center">
+                            <div class="col-8">
+                                <h1>Shopping Cart Services</h1>
+                            </div>
+                            <div class="col-4">
+                                <div class="row justify-content-end">
+                                    <a class="btn btn-success me-2 col-4" th:href="@{/shopping-cart/check-out}">Check
+                                        Out</a>
+                                    <a class="btn btn-danger me-2 col-4" th:href="@{/shopping-cart/clear}">Clear</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center m-2">
+                            <table class="table-bordered border-primary">
+                                <thead>
+                                <tr>
+                                    <th class="col-3">Product Name</th>
+                                    <th class="col-3">Price</th>
+                                    <th class="col-2">Quantity</th>
+                                    <th class="col-2">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr th:each="item : ${cartItems}">
+                                    <td th:text="${item.name}"></td>
+                                    <td th:text="${item.price}"></td>
+                                    <td>
+                                        <form th:action="@{/shopping-cart/update}" method="post">
+                                            <input type="hidden" name="id" th:value="${item.id}">
+                                            <input type="number"
+                                                   class="form-control" th:value="${item.quantity}"
+                                                   onblur="this.form.submit()" name="quantity"
+                                                   min="1"
+                                                   aria-label="Example text with button addon"
+                                                   aria-describedby="button-addon1">
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <!-- Button trigger modal -->
+                                        <button class="btn btn-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal"
+                                                th:data-id="${item.id}"
+                                                th:data-name="${item.name}"
+                                                onclick="showData(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+                            <span class="material-icons-outlined" style="color: blue">
+                                        delete
+                                    </span>
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title" id="exampleModalLabel">Shopping
+                                                            Cart</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4>Bạn muốn xóa <span class="h3" id="textName"></span> khỏi giỏ
+                                                            hàng
+                                                            không?</h4>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-danger" id="button-delete">
+                                                            Yes
+                                                        </a>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">
+                                                            No
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <span>Tổng số sản phẩm:  <p class="h3 fw-bold" th:text="${countItem}"></p></span>
+                                </div>
+                                <div class=" col-6">
+                                    <span>Thành tiền:  <p class="h3 fw-bold" th:text="${costItem}"></p></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--    end article    -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function showData(id, name) {
+        $('#textName').text(name)
+        $('#button-delete').attr('href', '/shopping-cart/delete/' + id)
+    }
+</script>
+</body>
+</html>

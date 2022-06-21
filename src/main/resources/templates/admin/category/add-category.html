@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>Create Account</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('categories-manager') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/categories-manager}">All Categoríe</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('categories-manager/add') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/categories-manager/add}">Add Category</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <form class="form-group" th:action="@{/admin/categories-manager/addOrEdit}" method="post"
+                      th:object="${category}" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{edit}">
+                    <div class="row justify-content-center m-2">
+                        <h1 class="fw-bold link-success mt-2 mb-3"
+                            th:text="${category.isEdit ? 'UPDATE PRODUCT' : 'ADD PRODUCT'}"></h1>
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="id"
+                                       placeholder="Product Name"
+                                       th:field="*{id}"
+                                       readonly>
+                                <label for="id">Category ID</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="floatingInput"
+                                       placeholder="Product Name"
+                                       th:field="*{name}"
+                                       maxlength="100"
+                                       oninvalid="this.setCustomValidity('Category name can not empty')"
+                                       oninput="this.setCustomValidity('')"
+                                       required>
+                                <label for="floatingInput">Product Name</label>
+                            </div>
+
+                            <label>Activated:</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{activated}"
+                                       id="activated1" value="true">
+                                <label class="form-check-label" for="activated1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio" th:field="*{activated}"
+                                       id="activated2" value="false">
+                                <label class="form-check-label" for="activated2">No</label>
+                            </div>
+
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <button class="btn btn-success col-3 me-3"
+                                    type="submit" th:text="${category.isEdit ? 'Update': 'Create'}">
+                            </button>
+                            <button class="btn btn-secondary col-2" type="reset">Reset</button>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+        <!--    end article    -->
+    </div>
+</div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>

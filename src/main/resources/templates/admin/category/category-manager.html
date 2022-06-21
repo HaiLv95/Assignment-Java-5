@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <title>User Manager</title>
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+
+
+</head>
+<body onload="ShowToast()">
+<div class="container-fluid">
+    <!--Nav-->
+    <div th:insert="~{/layout/navbar-admin}"></div>
+    <!--End Nav-->
+    <!--  Toast  -->
+    <div th:if="${message.length()} > 0">
+        <div th:replace="~{toast/toast-success}"></div>
+    </div>
+
+    <!--  End Toast  -->
+
+    <!--Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--    aside    -->
+            <div class="col-md-2 p-0 mt-2" style="border-right: 1px black solid; min-height: 600px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('categories-manager') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/categories-manager}">All
+                            Account</a>
+                    </li>
+                    <li class="list-group-item"
+                        th:class="${#httpServletRequest.requestURI.endsWith('categories-manager/add') ? 'list-group-item active' : 'list-group-item'}">
+                        <a class="link-dark text-decoration-none fw-bold"
+                           th:href="@{/admin/categories-manager/add}">Add Product</a>
+                    </li>
+                </ul>
+            </div>
+            <!--    end aside    -->
+
+            <!--    article    -->
+            <div class="col-md-10">
+                <div class="row justify-content-center m-2">
+                    <table class="table-bordered border-primary">
+                        <thead>
+                        <tr>
+                            <th class="col-3"><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/categories-manager/sort(sortby=${'id'}, sort='true')}">Category ID</a>
+                            </th>
+                            <th class="col-6"><a class="link-dark text-decoration-none fw-bold"
+                                                 th:href="@{/admin/categories-manager/sort(sortby=${'name'}, sort='true')}">Category Name</a>
+
+                            <th class="col-3">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="category : ${categoriesPage}">
+                            <td>[[${category.id}]]</td>
+                            <td>[[${category.name}]]</td>
+                            <td>
+                                <a th:href="@{'/admin/categories-manager/edit/' + ${category.id}}"
+                                   class="link-primary"><span
+                                        class="material-icons-outlined">edit</span></a>
+                                <a class="btn ms-1 p-0" data-bs-toggle="modal"
+                                   style="background: none; border: none"
+                                   th:href="@{'/admin/categories-manager/lock/' + ${category.id}}">
+                                    <th:block th:if="${category.activated}">
+                                        <span class="material-icons-outlined" style="color: blue">
+                                        lock_open
+                                    </span>
+                                    </th:block>
+                                    <th:block th:unless="${category.activated}">
+                                        <span class="material-icons-outlined" style="color: red">
+                                    lock
+                                    </span>
+                                    </th:block>
+                                </a>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <nav class="mt-2" aria-label="Page navigation example" th:if="${categoriesPage.totalPages > 0}">
+                        <ul class="pagination pagination-sm justify-content-center">
+                            <li th:class="${categoriesPage.number + 1 == 1} ? 'page-item active' : 'page-item'"
+                                style="margin-right: 5px">
+                                <a th:href="@{/admin/categories-manager(size=${categoriesPage.size}, page=${1}, sort='false')}"
+                                   class="page-link">First</a>
+                            </li>
+
+                            <li th:each="pageNumber : ${pageNumbers}"
+                                th:if="${categoriesPage.totalPages > 0}"
+                                th:class="${pageNumber == categoriesPage.number + 1} ? 'page-item active' : 'page-item'">
+                                <a th:href="@{/admin/categories-manager(page=${pageNumber}, sort='false')}"
+                                   class="page-link" th:text="${pageNumber}"></a>
+                            </li>
+
+                            <li
+                                    th:class="${categoriesPage.number + 1 == categoriesPage.totalPages} ? 'page-item active' : 'page-item'"
+                                    style="margin-left: 5px">
+                                <a th:href="@{/admin/categories-manager(size=${categoriesPage.size}, page=${categoriesPage.totalPages}, sort='false')}"
+                                   class="page-link">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--    end article    -->
+        </div>
+    </div>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+</body>
+</html>

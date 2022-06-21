@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <th:block th:insert="~{/layout/fragment-css-js :: link}"></th:block>
+    <title>Home</title>
+</head>
+<body onload="ShowToast()">
+<!--Nav-->
+<div th:insert="~{/layout/navbar-user :: nav-bar}"></div>
+<!--End Nav-->
+
+
+<!--Content-->
+
+
+<!-- Start Content -->
+<div class="container py-5">
+    <div class="row">
+
+        <div class="col-lg-3">
+            <ul class="list-unstyled templatemo-accordion">
+                <li class="pb-3">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
+                        Categories
+                        <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
+                    </a>
+                    <ul class="collapse show list-unstyled pl-3" >
+                        <th:block th:each="category : ${allCategories}">
+                            <li><a class="text-decoration-none" th:href="@{'/shop/category/' + ${category.id}}"
+                                   th:text="${#strings.toUpperCase(category.name)}"></a></li>
+                        </th:block>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-6 pb-4">
+                    <form class="d-flex" th:action="@{/shop/sort}" method="get">
+                        <input type="hidden" name="sort" value="true">
+                        <select class="form-control" onchange="this.form.submit()" name="sortby">
+                            <option value="name" th:selected="${sortName.equalsIgnoreCase('name')}">A to Z</option>
+                            <option value="price"th:selected="${sortName.equalsIgnoreCase('price')}">Price</option>
+                            <option value="categoryID" th:selected="${sortName.equalsIgnoreCase('categoryID')}">Category</option>
+                            <option  value="sell" th:selected="${sortName.equalsIgnoreCase('sell')}">Hot</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" th:each="product : ${productsPage}">
+                    <div class="card mb-4 product-wap rounded-0" style="height: 530px">
+                        <div class="card rounded-0">
+                            <img class="card-img rounded-0 img-fluid" th:src="@{'/shop/images/' + ${product.image}}"
+                                 style="height: 370px">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li><a class="btn btn-success text-white mt-2" th:href="@{'/shop/'+ ${product.id}}"><i
+                                            class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2"
+                                           th:href="@{'/shopping-cart/add/' + ${product.id}}"><i
+                                            class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a th:href="@{'/shopping-cart/add/' + ${product.id}}" class="h3 text-decoration-none"
+                               th:text="${#strings.toUpperCase(product.name)}"></a>
+                            <th:block th:if="${product.quantity > 0}">
+                                <p class="text-sm-start mt-1 mb-1"
+                                   th:classappend="${product.sell} >= 10 ? 'text-danger': 'text-primary'"
+                                   th:text="${'Đã bán (' + product.sell + ')'}"></p>
+                            </th:block>
+                            <th:block th:unless="${product.quantity > 0}">
+                                <p class="text-sm-start mt-1 mb-1"
+                                   th:classappend="text-warning fw-bold"
+                                   th:text="Hết hàng"></p>
+                            </th:block>
+                            <p class="text-center mb-0" th:text="${'$ ' + product.price}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div div="row">
+                <ul class="pagination pagination-lg justify-content-end" th:if="${productsPage.totalPages > 0}">
+                    <li th:class="${productsPage.number + 1 == 1} ? 'page-item active' : 'page-item'"
+                        style="margin-right: 5px">
+                        <a th:href="@{/shop/sort(size=${productsPage.size}, page=${1}, sort='false')}"
+                           class="page-link">First</a>
+                    </li>
+
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:if="${productsPage.totalPages > 0}"
+                        th:class="${pageNumber == productsPage.number + 1} ? 'page-item active' : 'page-item'">
+                        <a th:href="@{/shop/sort(page=${pageNumber}, sort='false')}"
+                           class="page-link" th:text="${pageNumber}"></a>
+                    </li>
+
+                    <li
+                            th:class="${productsPage.number + 1 == productsPage.totalPages} ? 'page-item active' : 'page-item'"
+                            style="margin-left: 5px">
+                        <a th:href="@{/shop/sort(size=${productsPage.size}, page=${productsPage.totalPages}, sort='false')}"
+                           class="page-link">Last</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- End Content -->
+
+</div>
+<!--End Content-->
+
+<!--Footer-->
+<div th:insert="~{/layout/footer-user}"></div>
+<!--End Footer-->
+<th:block th:insert="~{/layout/fragment-css-js :: script}"></th:block>
+</body>
+</html>

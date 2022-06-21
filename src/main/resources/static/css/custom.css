@@ -1,0 +1,11 @@
+/*
+Custom Css
+*/
+.dropdown-toggle{
+    border: none;
+    outline: none;
+    background: none;
+}
+.dropdown-toggle:focus{
+    outline: none;
+}
